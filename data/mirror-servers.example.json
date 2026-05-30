@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "name": "Пример модпака",
+    "dir": "technic",
+    "version": "1.20.1",
+    "has_server": true
+  }
+]
