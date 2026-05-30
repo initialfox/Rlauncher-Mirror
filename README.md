@@ -4,8 +4,6 @@
 
 Полный API — в [Rlauncher-Backend](https://github.com/initialfox/Rlauncher-Backend).
 
-**Как подключить лаунчер к зеркалу:** [docs/LAUNCHER_INTEGRATION.md](docs/LAUNCHER_INTEGRATION.md)
-
 ## Быстрый старт
 
 ```bash
