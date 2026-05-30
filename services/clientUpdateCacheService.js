@@ -17,20 +17,30 @@ function cacheKey(serverId, arch) {
 }
 
 function getSigningKey() {
-  const key = process.env.CLIENT_UPDATE_PRIVATE_KEY;
-  if (!key || !String(key).includes('PRIVATE KEY')) {
-    throw new Error(
-      'Задайте CLIENT_UPDATE_PRIVATE_KEY в .env (тот же ключ, что на основном API)'
-    );
+  const raw = process.env.CLIENT_UPDATE_PRIVATE_KEY;
+  if (raw == null || raw === '' || raw === 'null') {
+    return null;
+  }
+  const key = String(raw).trim();
+  if (!key || key === 'null' || !key.includes('PRIVATE KEY')) {
+    return null;
   }
   return key;
 }
 
+function signAlgorithm() {
+  return getSigningKey() ? 'RSA-SHA256' : null;
+}
+
 function signObject(obj) {
+  const key = getSigningKey();
+  if (!key) {
+    return null;
+  }
   const sign = crypto.createSign('RSA-SHA256');
   sign.update(stableStringify(obj));
   sign.end();
-  return sign.sign(getSigningKey(), 'base64');
+  return sign.sign(key, 'base64');
 }
 
 async function buildManifestObject(rec, arch) {
@@ -53,7 +63,7 @@ async function buildAndCacheUpdate(rec, arch) {
   const entry = {
     object,
     signature,
-    algorithm: 'RSA-SHA256',
+    algorithm: signAlgorithm(),
     syncedAt: new Date().toISOString()
   };
   updatesDirMap.set(cacheKey(rec.id, arch), entry);
@@ -75,7 +85,7 @@ function buildSignedProfilesEntry(rows) {
   return {
     object,
     signature,
-    algorithm: 'RSA-SHA256',
+    algorithm: signAlgorithm(),
     syncedAt: new Date().toISOString()
   };
 }

@@ -13,7 +13,7 @@ npm install
 cp .env.example .env
 cp data/mirror-servers.example.json data/mirror-servers.json
 # положить uploads/ (clients + loader) как на основном сервере
-# CLIENT_UPDATE_PRIVATE_KEY в .env — с основного API
+# CLIENT_UPDATE_PRIVATE_KEY в .env — опционально (можно пусто, если в лаунчере нет публичного ключа)
 
 node server.js --port 8888 --domain alternate.lastdawn.ru
 ```
